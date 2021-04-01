@@ -311,6 +311,7 @@ function debugOrdering(g) {
 }
 
 },{"./graphlib":7,"./lodash":10,"./util":29}],7:[function(require,module,exports){
+// eslint-disable-next-line no-redeclare
 /* global window */
 
 var graphlib;
@@ -844,6 +845,7 @@ function canonicalize(attrs) {
 }
 
 },{"./acyclic":2,"./add-border-segments":3,"./coordinate-system":4,"./graphlib":7,"./lodash":10,"./nesting-graph":11,"./normalize":12,"./order":17,"./parent-dummy-chains":22,"./position":24,"./rank":26,"./util":29}],10:[function(require,module,exports){
+// eslint-disable-next-line no-redeclare
 /* global window */
 
 var lodash;
@@ -2388,11 +2390,16 @@ module.exports = rank;
  *       fix them up later.
  */
 function rank(g) {
-  switch(g.graph().ranker) {
-  case "network-simplex": networkSimplexRanker(g); break;
-  case "tight-tree": tightTreeRanker(g); break;
-  case "longest-path": longestPathRanker(g); break;
-  default: networkSimplexRanker(g);
+  var ranker = g.graph().ranker;
+  if (typeof ranker === 'function') {
+    ranker(g);
+  } else {
+    switch(ranker) {
+      case "network-simplex": networkSimplexRanker(g); break;
+      case "tight-tree": tightTreeRanker(g); break;
+      case "longest-path": longestPathRanker(g); break;
+      default: networkSimplexRanker(g);
+    }
   }
 }
 
@@ -2950,7 +2957,7 @@ function notime(name, fn) {
 }
 
 },{"./graphlib":7,"./lodash":10}],30:[function(require,module,exports){
-module.exports = "0.8.5";
+module.exports = "0.8.6-pre";
 
 },{}]},{},[1])(1)
 });
