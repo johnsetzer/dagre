@@ -33,7 +33,7 @@ module.exports = {
   version: require("./lib/version")
 };
 
-},{"./lib/debug":6,"./lib/graphlib":7,"./lib/layout":9,"./lib/util":29,"./lib/version":30}],2:[function(require,module,exports){
+},{"./lib/debug":6,"./lib/graphlib":7,"./lib/layout":9,"./lib/util":30,"./lib/version":31}],2:[function(require,module,exports){
 "use strict";
 
 var _ = require("./lodash");
@@ -142,7 +142,7 @@ function addBorderNode(g, prop, prefix, sg, sgNode, rank) {
   }
 }
 
-},{"./lodash":10,"./util":29}],4:[function(require,module,exports){
+},{"./lodash":10,"./util":30}],4:[function(require,module,exports){
 "use strict";
 
 var _ = require("./lodash");
@@ -310,7 +310,8 @@ function debugOrdering(g) {
   return h;
 }
 
-},{"./graphlib":7,"./lodash":10,"./util":29}],7:[function(require,module,exports){
+},{"./graphlib":7,"./lodash":10,"./util":30}],7:[function(require,module,exports){
+// eslint-disable-next-line no-redeclare
 /* global window */
 
 var graphlib;
@@ -843,7 +844,8 @@ function canonicalize(attrs) {
   return newAttrs;
 }
 
-},{"./acyclic":2,"./add-border-segments":3,"./coordinate-system":4,"./graphlib":7,"./lodash":10,"./nesting-graph":11,"./normalize":12,"./order":17,"./parent-dummy-chains":22,"./position":24,"./rank":26,"./util":29}],10:[function(require,module,exports){
+},{"./acyclic":2,"./add-border-segments":3,"./coordinate-system":4,"./graphlib":7,"./lodash":10,"./nesting-graph":11,"./normalize":12,"./order":17,"./parent-dummy-chains":22,"./position":24,"./rank":26,"./util":30}],10:[function(require,module,exports){
+// eslint-disable-next-line no-redeclare
 /* global window */
 
 var lodash;
@@ -1023,7 +1025,7 @@ function cleanup(g) {
   });
 }
 
-},{"./lodash":10,"./util":29}],12:[function(require,module,exports){
+},{"./lodash":10,"./util":30}],12:[function(require,module,exports){
 "use strict";
 
 var _ = require("./lodash");
@@ -1115,7 +1117,7 @@ function undo(g) {
   });
 }
 
-},{"./lodash":10,"./util":29}],13:[function(require,module,exports){
+},{"./lodash":10,"./util":30}],13:[function(require,module,exports){
 var _ = require("../lodash");
 
 module.exports = addSubgraphConstraints;
@@ -1425,7 +1427,7 @@ function assignOrder(g, layering) {
   });
 }
 
-},{"../graphlib":7,"../lodash":10,"../util":29,"./add-subgraph-constraints":13,"./build-layer-graph":15,"./cross-count":16,"./init-order":18,"./sort-subgraph":20}],18:[function(require,module,exports){
+},{"../graphlib":7,"../lodash":10,"../util":30,"./add-subgraph-constraints":13,"./build-layer-graph":15,"./cross-count":16,"./init-order":18,"./sort-subgraph":20}],18:[function(require,module,exports){
 "use strict";
 
 var _ = require("../lodash");
@@ -1726,7 +1728,7 @@ function compareWithBias(bias) {
   };
 }
 
-},{"../lodash":10,"../util":29}],22:[function(require,module,exports){
+},{"../lodash":10,"../util":30}],22:[function(require,module,exports){
 var _ = require("./lodash");
 
 module.exports = parentDummyChains;
@@ -2235,7 +2237,7 @@ function width(g, v) {
   return g.node(v).width;
 }
 
-},{"../graphlib":7,"../lodash":10,"../util":29}],24:[function(require,module,exports){
+},{"../graphlib":7,"../lodash":10,"../util":30}],24:[function(require,module,exports){
 "use strict";
 
 var _ = require("../lodash");
@@ -2267,7 +2269,7 @@ function positionY(g) {
 }
 
 
-},{"../lodash":10,"../util":29,"./bk":23}],25:[function(require,module,exports){
+},{"../lodash":10,"../util":30,"./bk":23}],25:[function(require,module,exports){
 "use strict";
 
 var _ = require("../lodash");
@@ -2358,13 +2360,14 @@ function shiftRanks(t, g, delta) {
   });
 }
 
-},{"../graphlib":7,"../lodash":10,"./util":28}],26:[function(require,module,exports){
+},{"../graphlib":7,"../lodash":10,"./util":29}],26:[function(require,module,exports){
 "use strict";
 
 var rankUtil = require("./util");
 var longestPath = rankUtil.longestPath;
 var feasibleTree = require("./feasible-tree");
 var networkSimplex = require("./network-simplex");
+var useExisting = require("./use-existing");
 
 module.exports = rank;
 
@@ -2392,6 +2395,7 @@ function rank(g) {
   case "network-simplex": networkSimplexRanker(g); break;
   case "tight-tree": tightTreeRanker(g); break;
   case "longest-path": longestPathRanker(g); break;
+  case "use-existing": useExisting(g); break;
   default: networkSimplexRanker(g);
   }
 }
@@ -2408,7 +2412,7 @@ function networkSimplexRanker(g) {
   networkSimplex(g);
 }
 
-},{"./feasible-tree":25,"./network-simplex":27,"./util":28}],27:[function(require,module,exports){
+},{"./feasible-tree":25,"./network-simplex":27,"./use-existing":28,"./util":29}],27:[function(require,module,exports){
 "use strict";
 
 var _ = require("../lodash");
@@ -2644,7 +2648,35 @@ function isDescendant(tree, vLabel, rootLabel) {
   return rootLabel.low <= vLabel.lim && vLabel.lim <= rootLabel.lim;
 }
 
-},{"../graphlib":7,"../lodash":10,"../util":29,"./feasible-tree":25,"./util":28}],28:[function(require,module,exports){
+},{"../graphlib":7,"../lodash":10,"../util":30,"./feasible-tree":25,"./util":29}],28:[function(require,module,exports){
+"use strict";
+
+var _ = require("../lodash");
+
+module.exports = useExisting;
+
+/*
+ * Just use the rank the node already has.
+ */
+function useExisting(g) {
+
+  function dfs(v) {
+    var label = g.node(v);
+    var rank = label.rank;
+
+    if (rank === Number.POSITIVE_INFINITY || // return value of _.map([]) for Lodash 3
+        rank === undefined || // return value of _.map([]) for Lodash 4
+        rank === null) { // return value of _.map([null])
+      label.rank = 0;
+    }
+
+    return label.rank;
+  }
+
+  _.forEach(g.sources(), dfs);
+}
+
+},{"../lodash":10}],29:[function(require,module,exports){
 "use strict";
 
 var _ = require("../lodash");
@@ -2709,7 +2741,7 @@ function slack(g, e) {
   return g.node(e.w).rank - g.node(e.v).rank - g.edge(e).minlen;
 }
 
-},{"../lodash":10}],29:[function(require,module,exports){
+},{"../lodash":10}],30:[function(require,module,exports){
 /* eslint "no-console": off */
 
 "use strict";
@@ -2949,8 +2981,8 @@ function notime(name, fn) {
   return fn();
 }
 
-},{"./graphlib":7,"./lodash":10}],30:[function(require,module,exports){
-module.exports = "0.8.5";
+},{"./graphlib":7,"./lodash":10}],31:[function(require,module,exports){
+module.exports = "0.8.6-pre";
 
 },{}]},{},[1])(1)
 });
